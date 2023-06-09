@@ -13,7 +13,7 @@ def extract_annotations(input_file: Path) -> list:
     doc = fitz.open(input_file)
 
     annotations = []
-    for page in doc:
+    for i, page in enumerate(doc):
         for annot in page.annots():
             info = annot.info
             colors = annot.colors
@@ -21,6 +21,7 @@ def extract_annotations(input_file: Path) -> list:
             highlighted_text = page.get_textbox(rect)
             annot_data = {**info, **colors}
             annot_data['highlighted_text'] = highlighted_text
+            annot_data['page'] = i + 1  # zero-index
             annotations.append(annot_data)
 
     return annotations
